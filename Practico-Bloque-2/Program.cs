@@ -25,6 +25,13 @@ builder.Services.AddOpenApi();
 // Registra el servicio que GENERA el documento OpenAPI (la spec de tu API).
 // Es el "Swagger" moderno de ASP.NET Core.
 
+builder.Services.AddSwaggerGen();
+// 🔑 Registra el GENERADOR de Swagger: crea el documento /swagger/v1/swagger.json
+//    a partir de los atributos de tus Controllers ([Route], [HttpGet], [ProducesResponseType])
+//    y de los DTOs (propiedades, [Required], [Range]...).
+//    Es el equivalente a lo que FastAPI arma solo con tus Pydantic models.
+//    (Este es el SERVICIO; la UI se registra más abajo, en el bloque de Development)
+
 builder.Services.AddScoped<IProductoRepository, ProductoRepositoryInMemory>();
 // 🔑 INYECCIÓN DE DEPENDENCIAS: cada vez que un Controller pida un IProductoRepository,
 //    el contenedor le entrega UNA INSTANCIA NUEVA de ProductoRepositoryInMemory.
@@ -53,6 +60,15 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     // Si sí: EXPONE el documento en /openapi/v1.json
     // Equivale a: if settings.ENV == "development": app.docs_url = "/docs"
+
+    app.UseSwagger();
+    // 🔑 MIDDLEWARE: expone el documento generado en /swagger/v1/swagger.json
+    //    (como lo hace MapOpenApi, pero con el formato Swagger que lee la UI)
+
+    app.UseSwaggerUI();
+    // 🔑 MIDDLEWARE: sirve la PÁGINA INTERACTIVA en /swagger
+    //    Ahí ves los endpoints, podés hacer "Try it out" y probar requests
+    //    desde el navegador. ES EL EQUIVALENTE A /docs DE FASTAPI.
 }
 
 app.UseHttpsRedirection();
