@@ -1,6 +1,54 @@
-@Practico_Bloque_2_HostAddress = http://localhost:5212
+# @Practico_Bloque_2_HostAddress = http://localhost:5212
 
-GET {{Practico_Bloque_2_HostAddress}}/weatherforecast/
-Accept: application/json
+# GET {{Practico_Bloque_2_HostAddress}}/weatherforecast/
+# Accept: application/json
 
 ###
+@host = http://localhost:5212
+
+GET {{host}}/api/productos
+
+###
+
+GET {{host}}/api/productos/1
+
+###
+
+GET {{host}}/api/productos/99
+
+###
+
+POST {{host}}/api/productos
+Content-Type: application/json
+
+{
+  "nombre": "Nuevo",
+  "precio": 1500,
+  "categoria": "Categoria 1"
+}
+
+###
+
+POST {{host}}/api/productos
+Content-Type: application/json
+
+{
+  "nombre": "ab",
+  "precio": 0,
+  "categoria": ""
+}
+
+
+###
+PUT {{host}}/api/productos/2
+Content-Type: application/json
+
+{
+  "nombre": "Editado",
+  "precio": 999,
+  "categoria": "Categoria 3"
+}
+
+###
+
+DELETE {{host}}/api/productos/1
