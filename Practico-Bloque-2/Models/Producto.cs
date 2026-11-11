@@ -25,5 +25,6 @@ namespace Practico_Bloque_2.Models      // Namespace = "carpeta lógica" donde v
 
         public bool Activo { get; set; } // Flag de activo/inactivo (true/false)
 
+
     }                                   // Fin de la clase Producto
 }                                       // Fin del namespace

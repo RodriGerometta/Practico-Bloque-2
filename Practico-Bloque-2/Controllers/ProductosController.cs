@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-// Trae tipos del pipeline HTTP (Results, IFormFile, StatusCodeCodes...)
+﻿// Trae tipos del pipeline HTTP (Results, IFormFile, StatusCodeCodes...)
 
 using Microsoft.AspNetCore.Mvc;
 // 🔑 Trae TODO lo del MVC/Controllers: [Route], [HttpGet], [HttpPost],
 //    ControllerBase, IActionResult, Ok(), NotFound()...
 
 using Practico_Bloque_2.DTOs;      // Para recibir CreateProductoDto y devolver ProductoDto
-using Practico_Bloque_2.Models;    // Para la entidad Producto
 using Practico_Bloque_2.Services;  // Para pedir IProductoService (la lógica de negocio)
 
 namespace Practico_Bloque_2.Controllers

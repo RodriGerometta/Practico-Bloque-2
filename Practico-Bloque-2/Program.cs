@@ -1,10 +1,8 @@
+using Microsoft.EntityFrameworkCore;            // Importa el DbContext (AppDbContext)
+using Practico_Bloque_2.Data;
 using Practico_Bloque_2.Repositories;   // Importa el repositorio y su interfaz (IProductoRepository, ProductoRepositoryInMemory)
 using Practico_Bloque_2.Services;        // Importa los servicios (IProductoService, ProductoService)
 
-IProductoRepository repo = new ProductoRepositoryInMemory();
-// ⚠️ CÓDIGO MUERTO: esta variable ya NO se usa en ninguna parte.
-//    (antes servía para las pruebas en consola que borraste)
-//    Se puede eliminar esta línea sin que pase nada.
 
 var builder = WebApplication.CreateBuilder(args);
 // 🔑 FASE 1: crea el BUILDER (objeto de configuración de la app web).
@@ -32,7 +30,7 @@ builder.Services.AddSwaggerGen();
 //    Es el equivalente a lo que FastAPI arma solo con tus Pydantic models.
 //    (Este es el SERVICIO; la UI se registra más abajo, en el bloque de Development)
 
-builder.Services.AddScoped<IProductoRepository, ProductoRepositoryInMemory>();
+builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
 // 🔑 INYECCIÓN DE DEPENDENCIAS: cada vez que un Controller pida un IProductoRepository,
 //    el contenedor le entrega UNA INSTANCIA NUEVA de ProductoRepositoryInMemory.
 //    'Scoped' = una instancia POR CADA PETICIÓN HTTP.
@@ -47,10 +45,21 @@ builder.Services.AddScoped<IProductoService, ProductoService>();
 //    ProductoService le pide el repositorio por la INTERFAZ (no a mano con 'new').
 //    Cadena completa: Controller -> IProductoService -> IProductoRepository -> List<Producto>
 
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddCors(op =>
+    op.AddPolicy("PermitirTodo", p =>
+        p.AllowAnyOrigin()
+         .AllowAnyHeader()
+         .AllowAnyMethod()));
+
 var app = builder.Build();
 // 🔑 FASE 2: CONGELA la configuración y crea la app.
 // A partir de acá NO se pueden registrar más servicios (lanza excepción).
 // Es el punto de no retorno.
+
+app.UseCors("PermitirTodo");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
